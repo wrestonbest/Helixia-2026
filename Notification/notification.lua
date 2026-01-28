@@ -50,14 +50,14 @@ function nofitication:notify(nofdebug, middledebug, all)
     shadow.SliceCenter = Rect.new(10,10,118,118)
 
     window.Parent = shadow
-    window.BackgroundColor3 = Color3.fromRGB(25,25,25)
+    window.BackgroundColor3 = Color3.fromRGB(18,18,18)
     window.BorderSizePixel = 0
     window.Position = UDim2.new(0,5,0,5)
     window.Size = UDim2.new(0,230,0,80)
     window.ZIndex = 2
 
     corner.Parent = window
-    corner.CornerRadius = UDim.new(0,8)
+    corner.CornerRadius = UDim.new(0,15)
 
     outline.Parent = window
     outline.BackgroundColor3 = outlinecolor

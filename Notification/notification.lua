@@ -36,6 +36,7 @@ function nofitication:notify(nofdebug, middledebug, all)
     local title = Instance.new("TextLabel")
     local desc = Instance.new("TextLabel")
     local corner = Instance.new("UICorner")
+    local stroke = Instance.new("UIStroke")
 
     shadow.Parent = holder
     shadow.AnchorPoint = Vector2.new(0.5,0.5)
@@ -55,10 +56,15 @@ function nofitication:notify(nofdebug, middledebug, all)
     window.Position = UDim2.new(0,5,0,5)
     window.Size = UDim2.new(0,230,0,80)
     window.ZIndex = 2
-
+    
     corner.Parent = window
     corner.CornerRadius = UDim.new(0,12)
-
+    
+    stroke.Parent = window
+    stroke.Thickness = 2
+    stroke.Color = Color3.fromRGB(255,255,255)
+    stroke.Transparency = 0
+    
     outline.Parent = window
     outline.BackgroundColor3 = outlinecolor
     outline.BorderSizePixel = 0

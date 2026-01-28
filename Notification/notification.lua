@@ -57,7 +57,7 @@ function nofitication:notify(nofdebug, middledebug, all)
     window.ZIndex = 2
 
     corner.Parent = window
-    corner.CornerRadius = UDim.new(0,15)
+    corner.CornerRadius = UDim.new(0,12)
 
     outline.Parent = window
     outline.BackgroundColor3 = outlinecolor
@@ -73,7 +73,7 @@ function nofitication:notify(nofdebug, middledebug, all)
     title.ZIndex = 4
     title.Font = Enum.Font.GothamSemibold
     title.Text = nofdebug.Title or ""
-    title.TextColor3 = Color3.fromRGB(220,220,220)
+    title.TextColor3 = Color3.fromRGB(240,240,240)
     title.TextSize = 12
     title.TextXAlignment = Enum.TextXAlignment.Left
 

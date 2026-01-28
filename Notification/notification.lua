@@ -61,7 +61,7 @@ function nofitication:notify(nofdebug, middledebug, all)
     corner.CornerRadius = UDim.new(0,12)
     
     stroke.Parent = window
-    stroke.Thickness = 2
+    stroke.Thickness = 0.5
     stroke.Color = Color3.fromRGB(255,255,255)
     stroke.Transparency = 0
     

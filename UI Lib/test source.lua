@@ -1301,23 +1301,24 @@ UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType ~= Enum.UserInputType.MouseMovement and input.UserInputType ~= Enum.UserInputType.Touch then return end
 
 	local posx = input.Position.X
-	local abspos = outerSlider.AbsolutePosition.X
-	local abssize = outerSlider.AbsoluteSize.X
-	local px = math.clamp((posx - abspos) / abssize, 0, 1)
+	local absx = outerSlider.AbsolutePosition.X
+	local size = outerSlider.AbsoluteSize.X
+	local px = math.clamp((posx - absx) / size, 0, 1)
 
-	local value = math.floor(Info.Minimum + ((Info.Maximum - Info.Minimum) * px))
-	local sizefromscale = (MinSize + (MaxSize - MinSize)) * px
-	sizefromscale = sizefromscale - (sizefromscale % 2)
+	local value = math.floor(info.Minimum + ((info.Maximum - info.Minimum) * px))
 
-	TweenService:Create(innerSlider, TweenInfo.new(0.1), {Size = UDim2.new(px, 0, 0, 4)}):Play()
+	TweenService:Create(innerSlider, TweenInfo.new(0.1), {
+		Size = UDim2.new(px, 0, 0, 4)
+	}):Play()
 
-	if Info.Flag ~= nil then
-		library.Flags[Info.Flag] = value
+	if info.Flag then
+		library.Flags[info.Flag] = value
 	end
 
-	sliderValueText.Text = tostring(value)..Info.Postfix
+	sliderValueText.Text = tostring(value)..info.Postfix
+
 	task.spawn(function()
-		pcall(Info.Callback, value)
+		pcall(info.Callback, value)
 	end)
 end)
 

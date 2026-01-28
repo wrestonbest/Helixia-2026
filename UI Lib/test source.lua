@@ -1305,20 +1305,20 @@ UserInputService.InputChanged:Connect(function(input)
 	local size = outerSlider.AbsoluteSize.X
 	local px = math.clamp((posx - absx) / size, 0, 1)
 
-	local value = math.floor(info.Minimum + ((info.Maximum - info.Minimum) * px))
+	local value = math.floor(Info.Minimum + ((Info.Maximum - Info.Minimum) * px))
 
 	TweenService:Create(innerSlider, TweenInfo.new(0.1), {
 		Size = UDim2.new(px, 0, 0, 4)
 	}):Play()
 
-	if info.Flag then
-		library.Flags[info.Flag] = value
+	if Info.Flag then
+		library.Flags[Info.Flag] = value
 	end
 
-	sliderValueText.Text = tostring(value)..info.Postfix
+	sliderValueText.Text = tostring(value)..Info.Postfix
 
 	task.spawn(function()
-		pcall(info.Callback, value)
+		pcall(Info.Callback, value)
 	end)
 end)
 

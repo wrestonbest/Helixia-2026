@@ -67,7 +67,7 @@ function nofitication:notify(nofdebug, middledebug, all)
     outline.ZIndex = 5
 
     title.Parent = window
-    title.BackgroundTransparency = 1
+    title.BackgroundTransparency = 0.7
     title.Position = UDim2.new(0,8,0,2)
     title.Size = UDim2.new(0,222,0,22)
     title.ZIndex = 4
@@ -75,6 +75,7 @@ function nofitication:notify(nofdebug, middledebug, all)
     title.Text = nofdebug.Title or ""
     title.TextColor3 = Color3.fromRGB(240,240,240)
     title.TextSize = 12
+    title.BackgroundColor3 = Color3.fromRGB(15,15,15)
     title.TextXAlignment = Enum.TextXAlignment.Left
 
     desc.Parent = window

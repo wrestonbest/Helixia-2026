@@ -9,257 +9,162 @@ if not gui then
     gui.ResetOnSpawn = false
     gui.Parent = coregui
 
+    local holder = Instance.new("Frame")
+    holder.Name = "Holder"
+    holder.BackgroundTransparency = 1
+    holder.Size = UDim2.new(1,0,1,0)
+    holder.Parent = gui
+
     local uilist = Instance.new("UIListLayout")
-    uilist.Parent = gui
+    uilist.Parent = holder
     uilist.HorizontalAlignment = Enum.HorizontalAlignment.Right
     uilist.VerticalAlignment = Enum.VerticalAlignment.Bottom
     uilist.SortOrder = Enum.SortOrder.LayoutOrder
 end
 
+local holder = gui:FindFirstChild("Holder")
+
 function nofitication:notify(nofdebug, middledebug, all)
-    local selectedtype = string.lower(tostring(middledebug.Type))
+    middledebug = middledebug or {}
+    local seltype = string.lower(tostring(middledebug.Type or "default"))
+    local time = middledebug.Time or 3
+    local outlinecolor = middledebug.OutlineColor or Color3.fromRGB(255,255,255)
 
-    local ambientshadow = Instance.new("ImageLabel")
+    local shadow = Instance.new("ImageLabel")
     local window = Instance.new("Frame")
-    local outlinea = Instance.new("Frame")
-    local windowtitle = Instance.new("TextLabel")
-    local windowdesc = Instance.new("TextLabel")
-    local windowcorner = Instance.new("UICorner")
+    local outline = Instance.new("Frame")
+    local title = Instance.new("TextLabel")
+    local desc = Instance.new("TextLabel")
+    local corner = Instance.new("UICorner")
 
-    ambientshadow.Parent = gui
-    ambientshadow.AnchorPoint = Vector2.new(0.5, 0.5)
-    ambientshadow.BackgroundTransparency = 1
-    ambientshadow.BorderSizePixel = 0
-    ambientshadow.Position = UDim2.new(0.915, 0, 0.936, 0)
-    ambientshadow.Size = UDim2.new(0, 0, 0, 0)
-    ambientshadow.Image = "rbxassetid://1316045217"
-    ambientshadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
-    ambientshadow.ImageTransparency = 0.4
-    ambientshadow.ScaleType = Enum.ScaleType.Slice
-    ambientshadow.SliceCenter = Rect.new(10, 10, 118, 118)
+    shadow.Parent = holder
+    shadow.AnchorPoint = Vector2.new(0.5,0.5)
+    shadow.BackgroundTransparency = 1
+    shadow.BorderSizePixel = 0
+    shadow.Position = UDim2.new(0.915,0,0.936,0)
+    shadow.Size = UDim2.new(0,0,0,0)
+    shadow.Image = "rbxassetid://1316045217"
+    shadow.ImageColor3 = Color3.fromRGB(0,0,0)
+    shadow.ImageTransparency = 0.4
+    shadow.ScaleType = Enum.ScaleType.Slice
+    shadow.SliceCenter = Rect.new(10,10,118,118)
 
-    window.Parent = ambientshadow
-    window.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    window.Parent = shadow
+    window.BackgroundColor3 = Color3.fromRGB(25,25,25)
     window.BorderSizePixel = 0
-    window.Position = UDim2.new(0, 5, 0, 5)
-    window.Size = UDim2.new(0, 230, 0, 80)
+    window.Position = UDim2.new(0,5,0,5)
+    window.Size = UDim2.new(0,230,0,80)
     window.ZIndex = 2
 
-    windowcorner.Parent = window
-    windowcorner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = window
+    corner.CornerRadius = UDim.new(0,8)
 
-    outlinea.Parent = window
-    outlinea.BackgroundColor3 = middledebug.OutlineColor
-    outlinea.BorderSizePixel = 0
-    outlinea.Position = UDim2.new(0, 0, 0, 25)
-    outlinea.Size = UDim2.new(0, 230, 0, 2)
-    outlinea.ZIndex = 5
+    outline.Parent = window
+    outline.BackgroundColor3 = outlinecolor
+    outline.BorderSizePixel = 0
+    outline.Position = UDim2.new(0,0,0,25)
+    outline.Size = UDim2.new(0,230,0,2)
+    outline.ZIndex = 5
 
-    windowtitle.Parent = window
-    windowtitle.BackgroundTransparency = 1
-    windowtitle.Position = UDim2.new(0, 8, 0, 2)
-    windowtitle.Size = UDim2.new(0, 222, 0, 22)
-    windowtitle.ZIndex = 4
-    windowtitle.Font = Enum.Font.GothamSemibold
-    windowtitle.Text = nofdebug.Title
-    windowtitle.TextColor3 = Color3.fromRGB(220, 220, 220)
-    windowtitle.TextSize = 12
-    windowtitle.TextXAlignment = Enum.TextXAlignment.Left
+    title.Parent = window
+    title.BackgroundTransparency = 1
+    title.Position = UDim2.new(0,8,0,2)
+    title.Size = UDim2.new(0,222,0,22)
+    title.ZIndex = 4
+    title.Font = Enum.Font.GothamSemibold
+    title.Text = nofdebug.Title or ""
+    title.TextColor3 = Color3.fromRGB(220,220,220)
+    title.TextSize = 12
+    title.TextXAlignment = Enum.TextXAlignment.Left
 
-    windowdesc.Parent = window
-    windowdesc.BackgroundTransparency = 1
-    windowdesc.Position = UDim2.new(0, 8, 0, 34)
-    windowdesc.Size = UDim2.new(0, 216, 0, 40)
-    windowdesc.ZIndex = 4
-    windowdesc.Font = Enum.Font.GothamSemibold
-    windowdesc.Text = nofdebug.Description
-    windowdesc.TextColor3 = Color3.fromRGB(180, 180, 180)
-    windowdesc.TextSize = 12
-    windowdesc.TextWrapped = true
-    windowdesc.TextXAlignment = Enum.TextXAlignment.Left
-    windowdesc.TextYAlignment = Enum.TextYAlignment.Top
+    desc.Parent = window
+    desc.BackgroundTransparency = 1
+    desc.Position = UDim2.new(0,8,0,34)
+    desc.Size = UDim2.new(0,216,0,40)
+    desc.ZIndex = 4
+    desc.Font = Enum.Font.GothamSemibold
+    desc.Text = nofdebug.Description or ""
+    desc.TextColor3 = Color3.fromRGB(180,180,180)
+    desc.TextSize = 12
+    desc.TextWrapped = true
+    desc.TextXAlignment = Enum.TextXAlignment.Left
+    desc.TextYAlignment = Enum.TextYAlignment.Top
 
-    if selectedtype == "default" then
+    if seltype == "default" then
         coroutine.wrap(function()
-            ambientshadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
-            outlinea:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
-            task.wait(middledebug.Time)
-            ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            shadow:TweenSize(UDim2.new(0,240,0,90),"Out","Linear",0.2)
+            outline:TweenSize(UDim2.new(0,0,0,2),"Out","Linear",time)
+            task.wait(time)
+            shadow:TweenSize(UDim2.new(0,0,0,0),"Out","Linear",0.2)
             task.wait(0.2)
-            ambientshadow:Destroy()
+            shadow:Destroy()
         end)()
-    elseif selectedtype == "image" then
-        ambientshadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
-        windowtitle.Position = UDim2.new(0, 24, 0, 2)
-
-        local imagebutton = Instance.new("ImageButton")
-        imagebutton.Parent = window
-        imagebutton.BackgroundTransparency = 1
-        imagebutton.Position = UDim2.new(0, 4, 0, 4)
-        imagebutton.Size = UDim2.new(0, 18, 0, 18)
-        imagebutton.ZIndex = 5
-        imagebutton.AutoButtonColor = false
-        imagebutton.Image = all.Image
-        imagebutton.ImageColor3 = all.ImageColor
-
+    elseif seltype == "image" then
+        shadow:TweenSize(UDim2.new(0,240,0,90),"Out","Linear",0.2)
+        title.Position = UDim2.new(0,24,0,2)
+        local imgbtn = Instance.new("ImageButton")
+        imgbtn.Parent = window
+        imgbtn.BackgroundTransparency = 1
+        imgbtn.Position = UDim2.new(0,4,0,4)
+        imgbtn.Size = UDim2.new(0,18,0,18)
+        imgbtn.ZIndex = 5
+        imgbtn.AutoButtonColor = false
+        imgbtn.Image = all and all.Image or ""
+        imgbtn.ImageColor3 = all and all.ImageColor or Color3.fromRGB(255,255,255)
         coroutine.wrap(function()
-            outlinea:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
-            task.wait(middledebug.Time)
-            ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            outline:TweenSize(UDim2.new(0,0,0,2),"Out","Linear",time)
+            task.wait(time)
+            shadow:TweenSize(UDim2.new(0,0,0,0),"Out","Linear",0.2)
             task.wait(0.2)
-            ambientshadow:Destroy()
+            shadow:Destroy()
         end)()
-    elseif selectedtype == "option" then
-        ambientshadow:TweenSize(UDim2.new(0, 240, 0, 110), "Out", "Linear", 0.2)
-        window.Size = UDim2.new(0, 230, 0, 100)
+    elseif seltype == "option" then
+        shadow:TweenSize(UDim2.new(0,240,0,110),"Out","Linear",0.2)
+        window.Size = UDim2.new(0,230,0,100)
 
         local uncheck = Instance.new("ImageButton")
         local check = Instance.new("ImageButton")
 
         uncheck.Parent = window
         uncheck.BackgroundTransparency = 1
-        uncheck.Position = UDim2.new(0, 7, 0, 76)
-        uncheck.Size = UDim2.new(0, 18, 0, 18)
+        uncheck.Position = UDim2.new(0,7,0,76)
+        uncheck.Size = UDim2.new(0,18,0,18)
         uncheck.ZIndex = 5
         uncheck.AutoButtonColor = false
         uncheck.Image = "http://www.roblox.com/asset/?id=6031094678"
-        uncheck.ImageColor3 = Color3.fromRGB(255, 84, 84)
+        uncheck.ImageColor3 = Color3.fromRGB(255,84,84)
 
         check.Parent = window
         check.BackgroundTransparency = 1
-        check.Position = UDim2.new(0, 28, 0, 76)
-        check.Size = UDim2.new(0, 18, 0, 18)
+        check.Position = UDim2.new(0,28,0,76)
+        check.Size = UDim2.new(0,18,0,18)
         check.ZIndex = 5
         check.AutoButtonColor = false
         check.Image = "http://www.roblox.com/asset/?id=6031094667"
-        check.ImageColor3 = Color3.fromRGB(83, 230, 50)
+        check.ImageColor3 = Color3.fromRGB(83,230,50)
 
         coroutine.wrap(function()
             local alive = true
-
             uncheck.MouseButton1Click:Connect(function()
-                pcall(function()
-                    all.Callback(false)
-                end)
+                if all and all.Callback then pcall(all.Callback,false) end
                 alive = false
-                ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+                shadow:TweenSize(UDim2.new(0,0,0,0),"Out","Linear",0.2)
                 task.wait(0.2)
-                ambientshadow:Destroy()
+                shadow:Destroy()
             end)
-
             check.MouseButton1Click:Connect(function()
-                pcall(function()
-                    all.Callback(true)
-                end)
+                if all and all.Callback then pcall(all.Callback,true) end
                 alive = false
-                ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+                shadow:TweenSize(UDim2.new(0,0,0,0),"Out","Linear",0.2)
                 task.wait(0.2)
-                ambientshadow:Destroy()
+                shadow:Destroy()
             end)
-
-            outlinea:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
-            task.wait(middledebug.Time)
-
+            outline:TweenSize(UDim2.new(0,0,0,2),"Out","Linear",time)
+            task.wait(time)
             if alive then
-                ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+                shadow:TweenSize(UDim2.new(0,0,0,0),"Out","Linear",0.2)
                 task.wait(0.2)
-                ambientshadow:Destroy()
-            end
-        end)()
-    end
-end
-
-return nofitication    windowdesc.TextColor3 = Color3.fromRGB(180, 180, 180)
-    windowdesc.TextSize = 12
-    windowdesc.TextWrapped = true
-    windowdesc.TextXAlignment = Enum.TextXAlignment.Left
-    windowdesc.TextYAlignment = Enum.TextYAlignment.Top
-
-    if selectedtype == "default" then
-        coroutine.wrap(function()
-            ambientshadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
-            outlinea:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
-            task.wait(middledebug.Time)
-            ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-            task.wait(0.2)
-            ambientshadow:Destroy()
-        end)()
-    elseif selectedtype == "image" then
-        ambientshadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
-        windowtitle.Position = UDim2.new(0, 24, 0, 2)
-
-        local imagebutton = Instance.new("ImageButton")
-        imagebutton.Parent = window
-        imagebutton.BackgroundTransparency = 1
-        imagebutton.Position = UDim2.new(0, 4, 0, 4)
-        imagebutton.Size = UDim2.new(0, 18, 0, 18)
-        imagebutton.ZIndex = 5
-        imagebutton.AutoButtonColor = false
-        imagebutton.Image = all.Image
-        imagebutton.ImageColor3 = all.ImageColor
-
-        coroutine.wrap(function()
-            outlinea:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
-            task.wait(middledebug.Time)
-            ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-            task.wait(0.2)
-            ambientshadow:Destroy()
-        end)()
-    elseif selectedtype == "option" then
-        ambientshadow:TweenSize(UDim2.new(0, 240, 0, 110), "Out", "Linear", 0.2)
-        window.Size = UDim2.new(0, 230, 0, 100)
-
-        local uncheck = Instance.new("ImageButton")
-        local check = Instance.new("ImageButton")
-
-        uncheck.Parent = window
-        uncheck.BackgroundTransparency = 1
-        uncheck.Position = UDim2.new(0, 7, 0, 76)
-        uncheck.Size = UDim2.new(0, 18, 0, 18)
-        uncheck.ZIndex = 5
-        uncheck.AutoButtonColor = false
-        uncheck.Image = "http://www.roblox.com/asset/?id=6031094678"
-        uncheck.ImageColor3 = Color3.fromRGB(255, 84, 84)
-
-        check.Parent = window
-        check.BackgroundTransparency = 1
-        check.Position = UDim2.new(0, 28, 0, 76)
-        check.Size = UDim2.new(0, 18, 0, 18)
-        check.ZIndex = 5
-        check.AutoButtonColor = false
-        check.Image = "http://www.roblox.com/asset/?id=6031094667"
-        check.ImageColor3 = Color3.fromRGB(83, 230, 50)
-
-        coroutine.wrap(function()
-            local alive = true
-
-            uncheck.MouseButton1Click:Connect(function()
-                pcall(function()
-                    all.Callback(false)
-                end)
-                alive = false
-                ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-                task.wait(0.2)
-                ambientshadow:Destroy()
-            end)
-
-            check.MouseButton1Click:Connect(function()
-                pcall(function()
-                    all.Callback(true)
-                end)
-                alive = false
-                ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-                task.wait(0.2)
-                ambientshadow:Destroy()
-            end)
-
-            outlinea:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
-            task.wait(middledebug.Time)
-
-            if alive then
-                ambientshadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-                task.wait(0.2)
-                ambientshadow:Destroy()
+                shadow:Destroy()
             end
         end)()
     end

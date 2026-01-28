@@ -1172,155 +1172,88 @@ end)
 
 return insidetoggle
 end
+function section:Slider(Info)
+	Info = Info or {}
+	Info.Text = Info.Text or "slider"
+	Info.Minimum = Info.Minimum or 0
+	Info.Maximum = Info.Maximum or 100
+	Info.Default = Info.Default or Info.Minimum
+	Info.Postfix = Info.Postfix or ""
 
-function sectiontable:Slider(Info)
-Info.Text = Info.Text or "Slider"
-Info.Default = Info.Default or 50
-Info.Minimum = Info.Minimum or 1
-Info.Flag = Info.Flag or nil
-Info.Maximum = Info.Maximum or 100
-Info.Postfix = Info.Postfix or ""
-Info.Callback = Info.Callback or function() end
-Info.Tooltip = Info.Tooltip or ""
+	local dragging = false
+	local value = Info.Default
 
-if Info.Minimum > Info.Maximum then
-local ValueBefore = Info.Minimum
-Info.Minimum, Info.Maximum = Info.Maximum, ValueBefore
-end
+	local slider = Instance.new("Frame")
+	slider.Size = UDim2.new(1, 0, 0, 36)
+	slider.BackgroundTransparency = 1
+	slider.Parent = SectionContent
 
-Info.Default = math.clamp(Info.Default, Info.Minimum, Info.Maximum)
-local DefaultScale = (Info.Default - Info.Minimum) / (Info.Maximum - Info.Minimum)
+	local title = Instance.new("TextLabel")
+	title.Text = Info.Text
+	title.Size = UDim2.new(1, 0, 0, 14)
+	title.BackgroundTransparency = 1
+	title.TextXAlignment = Left
+	title.Parent = slider
 
-local slider = Instance.new("Frame")
-slider.Name = "Slider"
-slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-slider.BackgroundTransparency = 1
-slider.Position = UDim2.new(0, 0, 0.825, 0)
-slider.Size = UDim2.new(0, 162, 0, 40)
-slider.Parent = sectionFrame
+	local outer = Instance.new("Frame")
+	outer.Size = UDim2.new(1, 0, 0, 4)
+	outer.Position = UDim2.new(0, 0, 1, -6)
+	outer.BackgroundColor3 = Color3.fromRGB(40,40,40)
+	outer.Parent = slider
 
-if Info.Tooltip ~= "" then
-    AddTooltip(slider, Info.Tooltip)
-end
+	local inner = Instance.new("Frame")
+	inner.Size = UDim2.new(0, 0, 1, 0)
+	inner.BackgroundColor3 = Color3.fromRGB(200,200,200)
+	inner.Parent = outer
 
-local sliderText = Instance.new("TextLabel")
-sliderText.Name = "SliderText"
-sliderText.Font = Enum.Font.GothamBold
-sliderText.Text = Info.Text
-sliderText.TextColor3 = Color3.fromRGB(217, 217, 217)
-sliderText.TextSize = 11
-sliderText.TextXAlignment = Enum.TextXAlignment.Left
-sliderText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-sliderText.BackgroundTransparency = 1
-sliderText.Position = UDim2.new(0.0488, 0, 0, 0)
-sliderText.Size = UDim2.new(0, 156, 0, 27)
-sliderText.Parent = slider
+	local valuetext = Instance.new("TextLabel")
+	valuetext.Text = tostring(value)..Info.Postfix
+	valuetext.Size = UDim2.new(0, 60, 0, 14)
+	valuetext.Position = UDim2.new(1, -60, 0, 0)
+	valuetext.BackgroundTransparency = 1
+	valuetext.TextXAlignment = Right
+	valuetext.Parent = slider
 
-local outerSlider = Instance.new("Frame")
-outerSlider.Name = "OuterSlider"
-outerSlider.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
-outerSlider.BorderSizePixel = 0
-outerSlider.Position = UDim2.new(0.049, -1, 0.664, 0)
-outerSlider.Size = UDim2.new(0, 149, 0, 4)
-outerSlider.Parent = slider
-
-local sliderCorner = Instance.new("UICorner")
-sliderCorner.Name = "SliderCorner"
-sliderCorner.CornerRadius = UDim.new(0, 100)
-sliderCorner.Parent = outerSlider
-
-local innerSlider = Instance.new("Frame")
-innerSlider.Name = "InnerSlider"
-innerSlider.BackgroundColor3 = Color3.fromRGB(48, 207, 106)
-innerSlider.BorderSizePixel = 0
-innerSlider.Size = UDim2.new(DefaultScale, 0, 0, 4)
-innerSlider.ZIndex = 2
-innerSlider.Parent = outerSlider
-
-ColorElements[innerSlider] = {Type = "Slider", Enabled = false}
-
-local innerSliderCorner = Instance.new("UICorner")
-innerSliderCorner.Name = "InnerSliderCorner"
-innerSliderCorner.CornerRadius = UDim.new(0, 100)
-innerSliderCorner.Parent = innerSlider
-
-local sliderValueText = Instance.new("TextLabel")
-sliderValueText.Name = "SliderValueText"
-sliderValueText.Font = Enum.Font.GothamBold
-sliderValueText.Text = tostring(Info.Default)..Info.Postfix
-sliderValueText.TextColor3 = Color3.fromRGB(217, 217, 217)
-sliderValueText.TextSize = 11
-sliderValueText.TextXAlignment = Enum.TextXAlignment.Right
-sliderValueText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-sliderValueText.BackgroundTransparency = 1
-sliderValueText.Position = UDim2.new(0.0488, 0, 0, 0)
-sliderValueText.Size = UDim2.new(0, 149, 0, 27)
-sliderValueText.Parent = slider
-
-local sliderButton = Instance.new("TextButton")
-sliderButton.Name = "SliderButton"
-sliderButton.Font = Enum.Font.SourceSans
-sliderButton.Text = ""
-sliderButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-sliderButton.TextSize = 14
-sliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-sliderButton.BackgroundTransparency = 1
-sliderButton.Position = UDim2.new(0.049, 0, 0.664, 0)
-sliderButton.Size = UDim2.new(0, 149, 0, 4)
-sliderButton.Parent = slider
-
-task.spawn(function()
-    pcall(Info.Callback, Info.Default)
-    if Info.Flag ~= nil then
-        library.Flags[Info.Flag] = Info.Default
-    end
-end)
-
-local MinSize = 0
-local MaxSize = 1
-
-local SizeFromScale = (MinSize +  (MaxSize - MinSize)) * DefaultScale
-SizeFromScale = SizeFromScale - (SizeFromScale % 2)
-
-local dragging = false
-
-sliderButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-	end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if not dragging then return end
-	if input.UserInputType ~= Enum.UserInputType.MouseMovement and input.UserInputType ~= Enum.UserInputType.Touch then return end
-
-	local posx = input.Position.X
-	local absx = outerSlider.AbsolutePosition.X
-	local size = outerSlider.AbsoluteSize.X
-	local px = math.clamp((posx - absx) / size, 0, 1)
-
-	local value = math.floor(Info.Minimum + ((Info.Maximum - Info.Minimum) * px))
-
-	TweenService:Create(innerSlider, TweenInfo.new(0.1), {
-		Size = UDim2.new(px, 0, 0, 4)
-	}):Play()
-
-	if Info.Flag then
-		library.Flags[Info.Flag] = value
+	local function set(px)
+		local v = math.floor(Info.Minimum + ((Info.Maximum - Info.Minimum) * px))
+		value = v
+		inner.Size = UDim2.new(px, 0, 1, 0)
+		valuetext.Text = tostring(v)..Info.Postfix
+		if Info.Flag then
+			library.Flags[Info.Flag] = v
+		end
+		task.spawn(function()
+			pcall(Info.Callback, v)
+		end)
 	end
 
-	sliderValueText.Text = tostring(value)..Info.Postfix
-
-	task.spawn(function()
-		pcall(Info.Callback, value)
+	slider.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+		end
 	end)
-end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = false
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if not dragging then return end
+		if input.UserInputType ~= Enum.UserInputType.MouseMovement and input.UserInputType ~= Enum.UserInputType.Touch then return end
+
+		local px = math.clamp(
+			(input.Position.X - outer.AbsolutePosition.X) / outer.AbsoluteSize.X,
+			0,
+			1
+		)
+
+		set(px)
+	end)
+
+	set((value - Info.Minimum) / (Info.Maximum - Info.Minimum))
+end
 
 function sectiontable:Dropdown(Info)
 Info.Text = Info.Text or "Dropdown"
